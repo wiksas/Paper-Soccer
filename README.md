@@ -17,9 +17,13 @@ Konfiguracja:
 |:---:|:---:|
 | ![Menu główne](screenshots/1.jpg) | ![Wybór poziomu trudności](screenshots/2.jpg) |
 
+Plansza startowa:
+
+![Plansza startowa](screenshots/start.jpg)
+
 Rozgrywka:
 
-| Rozgrywka | Rozgrywka |
+| Rozgrywka 1 | Rozgrywka 2 |
 |:---:|:---:|
 | ![Rozgrywka 1](screenshots/3.jpg) | ![Rozgrywka 2](screenshots/4.jpg) |
 
