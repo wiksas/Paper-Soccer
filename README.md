@@ -1,5 +1,7 @@
 # Paper Soccer (Piłkarzyki na kartce)
 
+Projekt na studia.
+
 Implementacja gry "Piłkarzyki na kartce" w języku Java. Aplikacja desktopowa z interfejsem graficznym opartym na bibliotece Swing.
 
 ## Tryby gry
@@ -70,4 +72,3 @@ mvn test
 - Szymon Rafałowski: logika gry i architektura
 - Wiktor Sasnal: interfejs graficzny i testy jednostkowe
 
-Projekt zrealizowany na Wydziale Informatyki i Telekomunikacji Politechniki Krakowskiej.
