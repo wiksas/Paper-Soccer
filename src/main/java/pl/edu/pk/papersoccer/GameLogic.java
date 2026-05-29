@@ -22,6 +22,8 @@ public class GameLogic {
     private boolean isPlayerOneTurn;
     private String winnerMessage;
     private boolean vsAI;
+    private Difficulty difficulty;
+    private MinimaxAi ai;
 
     public GameLogic() {
         drawnLines = new ArrayList<>();
@@ -29,8 +31,28 @@ public class GameLogic {
         visitedVertices = new HashSet<>();
     }
 
+    // Konstruktor kopiujący na potrzeby symulacji minimaxa.
+    // Głęboko kopiuje mutowane kolekcje; borders są stałe w trakcie gry, więc współdzielone.
+    public GameLogic(GameLogic other) {
+        this.drawnLines = new ArrayList<>(other.drawnLines);
+        this.borders = other.borders;
+        this.visitedVertices = new HashSet<>(other.visitedVertices);
+        this.currentPosition = new Point(other.currentPosition);
+        this.isPlayerOneTurn = other.isPlayerOneTurn;
+        this.winnerMessage = other.winnerMessage;
+        this.vsAI = other.vsAI;
+        this.difficulty = other.difficulty;
+        this.ai = null;
+    }
+
     public void reset(boolean vsAI) {
+        reset(vsAI, Difficulty.MEDIUM);
+    }
+
+    public void reset(boolean vsAI, Difficulty difficulty) {
         this.vsAI = vsAI;
+        this.difficulty = difficulty;
+        this.ai = new MinimaxAi(difficulty);
         drawnLines.clear();
         borders.clear();
         visitedVertices.clear();
@@ -84,6 +106,12 @@ public class GameLogic {
                 (newPos.y == HEIGHT && (newPos.x < GOAL_LEFT || newPos.x > GOAL_RIGHT))) {
                 return false;
             }
+            // Do bramki wolno wejść tylko z otworu (kolumna x w [GOAL_LEFT, GOAL_RIGHT]),
+            // nie po skosie zza słupka - taka linia przechodziłaby poza boiskiem.
+            if ((newPos.y == 0 || newPos.y == HEIGHT)
+                    && (currentPosition.x < GOAL_LEFT || currentPosition.x > GOAL_RIGHT)) {
+                return false;
+            }
             return true;
         }
         return false;
@@ -132,59 +160,13 @@ public class GameLogic {
 
 
     public void makeAIMove() {
-        List<Point> validMoves = new ArrayList<>();
-        for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
-                if (x == 0 && y == 0) continue;
-                Point p = new Point(currentPosition.x + x, currentPosition.y + y);
-                if (isValidMove(p)) {
-                    validMoves.add(p);
-                }
-            }
+        if (winnerMessage != null || isPlayerOneTurn) return;
+        if (ai == null) {
+            ai = new MinimaxAi(difficulty == null ? Difficulty.MEDIUM : difficulty);
         }
-
-        if (!validMoves.isEmpty()) {
-            Point bestMove = validMoves.get(0);
-            int maxWeight = -999999;
-
-            for (Point p : validMoves) {
-                Line testLine = new Line(currentPosition, p, false);
-                drawnLines.add(testLine);
-                Point oldPos = currentPosition;
-                currentPosition = p;
-
-                int weight = 0;
-
-                if (p.y == HEIGHT) {
-                    weight = 10000;
-                }
-                else if (isDeadEnd(p)) {
-                    if (!visitedVertices.contains(p)) {
-                        weight = 5000;
-                    } else {
-                        weight = -5000;
-                    }
-                }
-
-                else {
-                    weight = p.y * 10;
-                    weight -= Math.abs(p.x - WIDTH / 2) * 2;
-
-                    if (visitedVertices.contains(p)) {
-                        weight += 15;
-                    }
-                }
-
-                weight += (int)(Math.random() * 4);
-                currentPosition = oldPos;
-                drawnLines.remove(drawnLines.size() - 1);
-
-                if (weight > maxWeight) {
-                    maxWeight = weight;
-                    bestMove = p;
-                }
-            }
-            makeMove(bestMove);
+        Point best = ai.chooseMove(this);
+        if (best != null) {
+            makeMove(best);
         }
     }
 
@@ -194,6 +176,9 @@ public class GameLogic {
     public boolean isPlayerOneTurn() { return isPlayerOneTurn; }
     public String getWinnerMessage() { return winnerMessage; }
     public boolean isVsAI() { return vsAI; }
+    public Difficulty getDifficulty() { return difficulty; }
+
+    boolean isVisited(Point p) { return visitedVertices.contains(p); }
 }
 
 class Line {

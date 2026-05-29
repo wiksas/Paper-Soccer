@@ -11,6 +11,10 @@ public class PaperSoccerApp {
     private GamePanel gamePanel;
 
     public static void main(String[] args) {
+        // Wygładzanie (antyaliasing) tekstu Swinga - ustawione przed startem GUI,
+        // inaczej napisy na przyciskach i tytułach są "schodkowate".
+        System.setProperty("awt.useSystemAAFontSettings", "on");
+        System.setProperty("swing.aatext", "true");
         SwingUtilities.invokeLater(() -> new PaperSoccerApp().createAndShowGUI());
     }
 
@@ -25,16 +29,22 @@ public class PaperSoccerApp {
         logic = new GameLogic();
         
         MenuPanel menuPanel = new MenuPanel(
-            () -> startGame(false),
-            () -> startGame(true)
+            () -> startGame(false, Difficulty.MEDIUM),
+            () -> cardLayout.show(cards, "DIFFICULTY")
+        );
+
+        DifficultyPanel difficultyPanel = new DifficultyPanel(
+            d -> startGame(true, d),
+            () -> cardLayout.show(cards, "MENU")
         );
 
         gamePanel = new GamePanel(logic, 
             () -> cardLayout.show(cards, "MENU"),
-            () -> startGame(logic.isVsAI())
+            () -> startGame(logic.isVsAI(), logic.getDifficulty())
         );
 
         cards.add(menuPanel, "MENU");
+        cards.add(difficultyPanel, "DIFFICULTY");
         cards.add(gamePanel, "GAME");
 
         frame.add(cards);
@@ -43,8 +53,8 @@ public class PaperSoccerApp {
         frame.setVisible(true);
     }
 
-    private void startGame(boolean vsAI) {
-        logic.reset(vsAI);
+    private void startGame(boolean vsAI, Difficulty difficulty) {
+        logic.reset(vsAI, difficulty);
         gamePanel.repaint();
         cardLayout.show(cards, "GAME");
     }

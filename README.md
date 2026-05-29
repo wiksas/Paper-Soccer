@@ -5,7 +5,21 @@ Implementacja gry "Piłkarzyki na kartce" w języku Java. Aplikacja desktopowa z
 ## Tryby gry
 
 - Gra 1 vs 1 na jednym komputerze (hot-seat)
-- Gra przeciwko komputerowi
+- Gra przeciwko komputerowi (poziomy trudności: Łatwy, Średni, Trudny)
+
+## Zrzuty ekranu
+
+Konfiguracja:
+
+| Menu główne | Wybór poziomu trudności |
+|:---:|:---:|
+| ![Menu główne](screenshots/1.jpg) | ![Wybór poziomu trudności](screenshots/2.jpg) |
+
+Rozgrywka:
+
+| Rozgrywka | Rozgrywka |
+|:---:|:---:|
+| ![Rozgrywka 1](screenshots/3.jpg) | ![Rozgrywka 2](screenshots/4.jpg) |
 
 ## Zasady
 

@@ -81,4 +81,17 @@ class GameLogicTest {
         // Tura NIE POWINNA sie zmienic, Gracz 1 dostaje bonusowy ruch z odbicia
         assertTrue(logic.isPlayerOneTurn(), "Gracz 1 powinien zachowac ture po wejsciu w stary wezel");
     }
+
+    @Test
+    void testCannotEnterGoalAroundThePost() {
+        // Piłka na (2,9): banda tuz obok lewego slupka bramki dolnej.
+        logic.makeMove(new Point(3, 6));
+        logic.makeMove(new Point(2, 7));
+        logic.makeMove(new Point(2, 8));
+        logic.makeMove(new Point(2, 9));
+        assertEquals(new Point(2, 9), logic.getCurrentPosition());
+        // Wejscie po skosie zza slupka do (3,10) jest nielegalne (przechodzi poza boiskiem).
+        assertFalse(logic.isValidMove(new Point(3, 10)),
+                "nie wolno wejsc do bramki zza slupka");
+    }
 }
