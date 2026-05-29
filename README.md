@@ -24,9 +24,17 @@ Piłka zaczyna na środku boiska. Gracze na przemian wykonują ruchy o jedno pol
 
 ## Kompilacja i uruchomienie
 
+Bez Mavena:
+
 ```bash
 javac -d out src/main/java/pl/edu/pk/papersoccer/*.java
 java -cp out pl.edu.pk.papersoccer.PaperSoccerApp
+```
+
+Przez Mavena, jednolinijkowo:
+
+```bash
+mvn -q compile exec:java
 ```
 
 ## Testy

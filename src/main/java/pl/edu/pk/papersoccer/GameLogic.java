@@ -96,11 +96,11 @@ public class GameLogic {
         currentPosition = newPos;
 
         if (currentPosition.y == 0) {
-            winnerMessage = "Wygrywa Gracz 1! (GOL!)";
+            winnerMessage = "Wygrywa Niebieski! (GOL!)";
             return;
         }
         if (currentPosition.y == HEIGHT) {
-            winnerMessage = vsAI ? "Wygrywa Komputer! (GOL!)" : "Wygrywa Gracz 2! (GOL!)";
+            winnerMessage = vsAI ? "Wygrywa Komputer! (GOL!)" : "Wygrywa Czerwony! (GOL!)";
             return;
         }
 
@@ -111,9 +111,9 @@ public class GameLogic {
 
         if (isDeadEnd(currentPosition)) {
             if (isPlayerOneTurn) {
-                winnerMessage = vsAI ? "Wygrywa Komputer! (Blokada)" : "Wygrywa Gracz 2! (Blokada)";
+                winnerMessage = vsAI ? "Wygrywa Komputer! (Blokada)" : "Wygrywa Czerwony! (Blokada)";
             } else {
-                winnerMessage = "Wygrywa Gracz 1! (Blokada)";
+                winnerMessage = "Wygrywa Niebieski! (Blokada)";
             }
         }
     }
