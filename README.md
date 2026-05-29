@@ -1,63 +1,51 @@
-# Paper Soccer ⚽ Piłkarzyki na Kartce
+# Paper Soccer (Piłkarzyki na kartce)
 
-Cyfrowa, desktopowa adaptacja klasycznej gry szkolnej **"Piłkarzyki na kartce"** zrealizowana w języku Java. Projekt posiada nowoczesny interfejs graficzny oraz zaawansowany moduł Sztucznej Inteligencji (AI).
+Implementacja gry "Piłkarzyki na kartce" w języku Java. Aplikacja desktopowa z interfejsem graficznym opartym na bibliotece Swing.
 
----
+## Tryby gry
 
-## 🌟 Funkcje projektu
+- Gra 1 vs 1 na jednym komputerze (hot-seat)
+- Gra przeciwko komputerowi
 
-- **Dwa tryby rozgrywki:**
-  - **Lokalny 1 vs 1 (Hot-Seat):** Rywalizacja dwóch graczy na jednym urządzeniu, poprawna obsługa tur i przeliczanie ścieżek.
-  - **Gra z Komputerem (Sztuczna Inteligencja):** Zaawansowany algorytm AI symulujący ruchy, szukający punktowych odbić i unikający ślepych zaułków.
-- **Płynna animacja AI:** Ruchy komputera posiadają wbudowane opóźnienie (*cooldown*), dzięki czemu można zaobserwować pełną sekwencję kroków przeciwnika.
-- **Dopracowany interfejs graficzny (UI/UX):**
-  - Ekologiczna alternatywa dla papieru, angażująca wyobraźnię geometryczną.
-  - Estetyczna, zielona murawa boiska i minimalistyczna siatka węzłów.
-  - Podświetlenie ostatniego wykonanego ruchu kolorem przypisanym do gracza.
-  - Generowanie boiska i poprawna identyfikacja wizualna bramek i tur graczy.
-- **Swoboda taktyczna:** Zaimplementowano reguły umożliwiające krzyżowanie linii na ukos.
-- **Wykrywanie końca gry:** System automatycznie ogłasza zwycięzcę po strzeleniu gola lub zablokowaniu przeciwnika w ślepym zaułku bez dozwolonych ruchów.
+## Zasady
 
----
+Piłka zaczyna na środku boiska. Gracze na przemian wykonują ruchy o jedno pole w pionie, poziomie lub na ukos, rysując tor piłki.
 
-## 🛠️ Technologie i narzędzia
+- Nie można prowadzić linii po torze już narysowanym ani po bandzie boiska.
+- Wejście na węzeł już odwiedzony lub na bandę daje dodatkowy ruch (odbicie).
+- Wejście na nowy węzeł kończy turę i oddaje ruch przeciwnikowi.
+- Wprowadzenie piłki do bramki przeciwnika kończy grę zwycięstwem.
+- Gracz, który nie ma żadnego dozwolonego ruchu, przegrywa.
+- Krzyżowanie linii na ukos jest dozwolone.
 
-- **Język programowania:** Java (17+)
-- **Biblioteka GUI:** Java Swing & AWT (`Graphics2D` z antyaliasingiem)
-- **Zarządzanie projektem:** Apache Maven
-- **Testy automatyczne:** JUnit 5 (Jupiter)
+## Wymagania
 
----
+- Java 17 lub nowsza
 
-## 🚀 Jak uruchomić?
+## Kompilacja i uruchomienie
 
-**Opcja 1: Przez Mavena (Zalecane)**
 ```bash
-mvn clean compile exec:java -Dexec.mainClass="PaperSoccerApp"
+javac -d out src/main/java/pl/edu/pk/papersoccer/*.java
+java -cp out PaperSoccerApp
 ```
 
-**Opcja 2: Bezpośrednio z terminala**
-```bash
-javac *.java && java PaperSoccerApp
-```
+## Testy
 
----
+Uruchomienie testów jednostkowych wymaga Mavena:
 
-## 🧪 Testy
-
-Aby uruchomić testy jednostkowe weryfikujące mechanikę gry, granice boiska oraz walidację ruchów, użyj komendy:
 ```bash
 mvn test
 ```
 
----
+## Użyte technologie
 
-## 👥 Autorzy (Skład zespołu projektowego)
+- Java 17 (Swing, AWT)
+- Maven
+- JUnit 5
 
-Zgodnie z Kartą Projektu, role zostały podzielone następująco:
+## Autorzy
 
-* **Szymon Rafałowski** (CEO) – Zarządzanie architekturą projektu, implementacja głównej logiki gry (mechanika tur, detekcja końca gry, moduł AI).
-* **Wiktor Sasnal** (COO) – Implementacja interfejsu graficznego (UI), podpięcie logiki pod widok, płynne animacje, zarządzanie scenami oraz tworzenie testów jednostkowych.
+- Szymon Rafałowski: logika gry i architektura
+- Wiktor Sasnal: interfejs graficzny i testy jednostkowe
 
----
-*Projekt akademicki zrealizowany na Wydziale Informatyki i Telekomunikacji Politechniki Krakowskiej.*
+Projekt zrealizowany na Wydziale Informatyki i Telekomunikacji Politechniki Krakowskiej.
