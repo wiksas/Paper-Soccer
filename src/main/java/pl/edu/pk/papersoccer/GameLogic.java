@@ -1,3 +1,5 @@
+package pl.edu.pk.papersoccer;
+
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -6,6 +8,13 @@ import java.util.Set;
 import java.util.Objects;
 
 public class GameLogic {
+    // Wymiary boiska (współrzędne węzłów: x od 0 do WIDTH, y od 0 do HEIGHT)
+    public static final int WIDTH = 8;
+    public static final int HEIGHT = 10;
+    // Słupki bramki (otwór bramki to x od GOAL_LEFT do GOAL_RIGHT)
+    public static final int GOAL_LEFT = 3;
+    public static final int GOAL_RIGHT = 5;
+
     private Point currentPosition;
     private List<Line> drawnLines;
     private List<Line> borders;
@@ -31,30 +40,30 @@ public class GameLogic {
     }
 
     private void setupBoard() {
-        for (int y = 1; y < 9; y++) {
-            borders.add(new Line(new Point(0, y), new Point(0, y + 1), false)); 
-            borders.add(new Line(new Point(8, y), new Point(8, y + 1), false)); 
+        for (int y = 1; y < HEIGHT - 1; y++) {
+            borders.add(new Line(new Point(0, y), new Point(0, y + 1), false));
+            borders.add(new Line(new Point(WIDTH, y), new Point(WIDTH, y + 1), false));
         }
-        for (int x = 0; x < 8; x++) {
-            if (x < 3 || x >= 5) {
-                borders.add(new Line(new Point(x, 1), new Point(x + 1, 1), false)); 
-                borders.add(new Line(new Point(x, 9), new Point(x + 1, 9), false)); 
+        for (int x = 0; x < WIDTH; x++) {
+            if (x < GOAL_LEFT || x >= GOAL_RIGHT) {
+                borders.add(new Line(new Point(x, 1), new Point(x + 1, 1), false));
+                borders.add(new Line(new Point(x, HEIGHT - 1), new Point(x + 1, HEIGHT - 1), false));
             }
         }
-        borders.add(new Line(new Point(3, 1), new Point(3, 0), false));
-        borders.add(new Line(new Point(5, 1), new Point(5, 0), false));
-        borders.add(new Line(new Point(3, 0), new Point(5, 0), false));
+        borders.add(new Line(new Point(GOAL_LEFT, 1), new Point(GOAL_LEFT, 0), false));
+        borders.add(new Line(new Point(GOAL_RIGHT, 1), new Point(GOAL_RIGHT, 0), false));
+        borders.add(new Line(new Point(GOAL_LEFT, 0), new Point(GOAL_RIGHT, 0), false));
 
-        borders.add(new Line(new Point(3, 9), new Point(3, 10), false));
-        borders.add(new Line(new Point(5, 9), new Point(5, 10), false));
-        borders.add(new Line(new Point(3, 10), new Point(5, 10), false));
+        borders.add(new Line(new Point(GOAL_LEFT, HEIGHT - 1), new Point(GOAL_LEFT, HEIGHT), false));
+        borders.add(new Line(new Point(GOAL_RIGHT, HEIGHT - 1), new Point(GOAL_RIGHT, HEIGHT), false));
+        borders.add(new Line(new Point(GOAL_LEFT, HEIGHT), new Point(GOAL_RIGHT, HEIGHT), false));
 
         for (Line l : borders) {
             visitedVertices.add(l.p1);
             visitedVertices.add(l.p2);
         }
 
-        currentPosition = new Point(4, 5);
+        currentPosition = new Point(WIDTH / 2, HEIGHT / 2);
         visitedVertices.add(currentPosition);
     }
 
@@ -67,12 +76,12 @@ public class GameLogic {
         if ((dx <= 1 && dy <= 1) && !(dx == 0 && dy == 0)) {
             Line potentialLine = new Line(currentPosition, newPos, false);
             if (drawnLines.contains(potentialLine) || borders.contains(potentialLine)) return false;
-            
-            // Usunięta blokada przecinania się linii na ukos! 
-            
-            if (newPos.x < 0 || newPos.x > 8 || newPos.y < 0 || newPos.y > 10) return false;
-            if ((newPos.y == 0 && (newPos.x < 3 || newPos.x > 5)) || 
-                (newPos.y == 10 && (newPos.x < 3 || newPos.x > 5))) {
+
+            // Krzyżowanie linii na ukos jest dozwolone (brak blokady).
+
+            if (newPos.x < 0 || newPos.x > WIDTH || newPos.y < 0 || newPos.y > HEIGHT) return false;
+            if ((newPos.y == 0 && (newPos.x < GOAL_LEFT || newPos.x > GOAL_RIGHT)) ||
+                (newPos.y == HEIGHT && (newPos.x < GOAL_LEFT || newPos.x > GOAL_RIGHT))) {
                 return false;
             }
             return true;
@@ -87,10 +96,10 @@ public class GameLogic {
         currentPosition = newPos;
 
         if (currentPosition.y == 0) {
-            winnerMessage = "Wygrywa Gracz 1! (GOL!)"; 
+            winnerMessage = "Wygrywa Gracz 1! (GOL!)";
             return;
         }
-        if (currentPosition.y == 10) {
+        if (currentPosition.y == HEIGHT) {
             winnerMessage = vsAI ? "Wygrywa Komputer! (GOL!)" : "Wygrywa Gracz 2! (GOL!)";
             return;
         }
@@ -114,11 +123,11 @@ public class GameLogic {
             for (int y = -1; y <= 1; y++) {
                 if (x == 0 && y == 0) continue;
                 if (isValidMove(new Point(p.x + x, p.y + y))) {
-                    return false; 
+                    return false;
                 }
             }
         }
-        return true; 
+        return true;
     }
 
 
@@ -146,21 +155,21 @@ public class GameLogic {
 
                 int weight = 0;
 
-                if (p.y == 10) {
+                if (p.y == HEIGHT) {
                     weight = 10000;
-                } 
+                }
                 else if (isDeadEnd(p)) {
                     if (!visitedVertices.contains(p)) {
-                        weight = 5000; 
+                        weight = 5000;
                     } else {
                         weight = -5000;
                     }
-                } 
+                }
 
                 else {
                     weight = p.y * 10;
-                    weight -= Math.abs(p.x - 4) * 2;
-                    
+                    weight -= Math.abs(p.x - WIDTH / 2) * 2;
+
                     if (visitedVertices.contains(p)) {
                         weight += 15;
                     }
@@ -192,17 +201,17 @@ class Line {
     boolean byPlayerOne;
 
     public Line(Point p1, Point p2, boolean byPlayerOne) {
-        this.p1 = p1; 
+        this.p1 = p1;
         this.p2 = p2;
         this.byPlayerOne = byPlayerOne;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof Line)) return false;
         Line other = (Line) obj;
-        return (p1.equals(other.p1) && p2.equals(other.p2)) || 
+        return (p1.equals(other.p1) && p2.equals(other.p2)) ||
                (p1.equals(other.p2) && p2.equals(other.p1));
     }
 

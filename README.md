@@ -26,7 +26,7 @@ Piłka zaczyna na środku boiska. Gracze na przemian wykonują ruchy o jedno pol
 
 ```bash
 javac -d out src/main/java/pl/edu/pk/papersoccer/*.java
-java -cp out PaperSoccerApp
+java -cp out pl.edu.pk.papersoccer.PaperSoccerApp
 ```
 
 ## Testy

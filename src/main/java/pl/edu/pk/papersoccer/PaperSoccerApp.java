@@ -1,3 +1,5 @@
+package pl.edu.pk.papersoccer;
+
 import javax.swing.*;
 import java.awt.*;
 
