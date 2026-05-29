@@ -1,0 +1,16 @@
+# Skompilowane pliki klas
+*.class
+
+# Maven – katalog wynikowy
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# System
+.DS_Store
