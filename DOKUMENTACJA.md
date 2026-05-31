@@ -1,7 +1,7 @@
 # Dokumentacja projektu: Paper Soccer (Piłkarzyki na kartce)
 
 Autorzy: Szymon Rafałowski, Wiktor Sasnal
-Politechnika Krakowska, Wydział Informatyki i Telekomunikacji
+Politechnika Krakowska, Wydział Informatyki i Matematyki
 
 ## 1. Opis projektu
 
